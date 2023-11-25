@@ -1,89 +1,91 @@
 let wrap = document.querySelector(".wrap")
 let bg = document.querySelector(".background")
 
-let settings = {
-    'xPath': "./img/X.png",
-    'oPath': "./img/O.png",
-    "countSquares" : 9,
-    "flag": false,
+let setings = {
+    'xPath':"./img/X.png",
+    'oPath':"./img/O.png",
+    "countSquares": 9,
+    "flag":false,
     "winComb": [[1,2,3],[1,5,9],[1,4,7],[2,5,8],[3,6,9],[3,5,7],[4,5,6],[7,8,9]],
-    "store" : [],
-    "winX" : [],
-    "winO" : [],
-    "once" : true
+    "store":[],
+    "winX":[],
+    "winO":[],
+    "once":true
 }
 
-const createElement = (tag,classElem,append) => {
+const createElement = (tag,classElem,append)=>{
     let element = document.createElement(tag)
     element.classList.add(classElem)
-    console.log(element)
     append.append(element)
 }
 
-const startGame = () => {
-    for(let i = 0; i < settings.countSquares; i++){
-        createElement('div','square', wrap)
+const startGame = () =>{
+    for(let i=0; i < setings.countSquares; i++){
+        createElement('div','square',wrap)
+
     }
-    createElement('span','turn-text', bg)
-    createElement('span','win-text', bg)
-    createElement('button','restart-button', bg)
+    createElement('span','turn-text',bg)
+    createElement('span','win-text',bg)
+    createElement('button','restart-button',bg)
+
+
 }
 
 startGame()
 
-const winner = () => {
+const winner = () =>{
     let winText = document.querySelector('.win-text')
-    let x = settings.winX
-    let o = settings.winO
-    if(settings.countSquares == 0){
+    let x = setings.winX
+    let o = setings.winO
+    if(setings.countSquares === 0){
         winText.innerHTML = "Its tie!!"
-        restart
+        return
     }
-    for(let i = 0; settings.winComb.length; i++){
-        let win = settinds.winComb[i]
+    for(let i=0; setings.winComb.length; i++){
+        let win  = setings.winComb[i]
 
-        if(x.includes(win[0] && x.includes(win[2]))){
+        if(x.includes(win[0])&& x.includes(win[1])&& x.includes(win[2])){
             winText.innerHTML = 'Win X'
-        }
-        if(o.includes(win[0] && x.includes(win[2]))){
+        }else if (o.includes(win[0])&& o.includes(win[1])&& o.includes(win[2])){
             winText.innerHTML = 'Win O'
         }
     }
 }
 
-const playerTurn = (player,flagP,img) => {
+const playerTurn = (player,flagP,img)=>{
     img.setAttribute('src',player)
-    settings.flag = flagP
+    setings.flag = flagP
 }
 
-let squares = document.querySelectorAll('.square')
+let square = document.querySelectorAll('.square')
 
-squares.forEach((elem,index) => {
-    elem.addEventListener('click', (e) => {
+
+square.forEach((elem,index) =>  {
+    elem.addEventListener('click', (e)=>{
         let check = elem.classList.contains('square')
         let img = document.createElement('img')
 
         if(check){
-            settings.store[index] = settings.flag
-            if(!settings.flag) {
-                playerTurn(settings.xPath,true,img)
-                settings.winX.push(index + 1)
+            setings.store[index] = setings.flag
+            if(!setings.flag){
+                playerTurn(setings.xPath,true,img)
+                setings.winX.push(index + 1)
             }else{
-                playerTurn(settings.oPath,false,img)
-                settings.winO.push(index + 1)
+                playerTurn(setings.oPath,false,img)
+                setings.winO.push(index + 1)
             }
             elem.append(img)
-            settings.countSquares -= 1
+            setings.countSquares -= 1 
             winner()
         }
-
-    },{"once": settings.once})
+    },{"once":setings.once})
 })
 
-let restart = document.querySelectorAll('restart-button')
 
-restart.includes = "Restart"
+let restart = document.querySelector('.restart-button')
 
-restart.addEventListener('click', () => {
+restart.innerHTML = "Restart"
+
+restart.addEventListener('click',()=>{
     window.location.reload()
 })
